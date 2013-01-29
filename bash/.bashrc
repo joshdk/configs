@@ -23,6 +23,7 @@ export EDITOR='vim'
 export SHELL='/bin/bash'
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.bin"
 
+HISTIGNORE=' *:rm *'
 PROMPT_COMMAND=precmd
 
 #{{{ Colors
