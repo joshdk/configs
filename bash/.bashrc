@@ -5,11 +5,6 @@
 
 
 
-if [ -x /bin/zsh ]; then
-	/bin/zsh
-fi
-
-
 #{{{ Bash settings
 # Source global definitions
 	if [ -f /etc/bashrc ]; then
