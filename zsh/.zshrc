@@ -50,13 +50,16 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$HOME/
 # zsh aliases
 alias zr="source $HOME/.zshrc"
 
+# things to ignore
+alias rm=' rm'
+
 # vim aliases
 alias vi='vim'
 alias vio='vim -O'
 alias vir='vim -R'
 
 # ls aliases
-alias ls='ls -p --group-directories-first --color=auto'
+alias ls=' ls -p --group-directories-first --color=auto'
 alias la='ls -A'
 alias ll='ls -lh'
 alias lla='ls -lhA'
