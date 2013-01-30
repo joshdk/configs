@@ -66,6 +66,7 @@ txtrst='\e[0m'    # Text Reset
 
 # {{{ Program aliases
 # zsh aliases
+alias be="$EDITOR $HOME/.bashrc"
 alias br="source $HOME/.bashrc"
 
 # vim aliases
