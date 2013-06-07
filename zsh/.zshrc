@@ -42,12 +42,14 @@ fi
 
 export EDITOR='vim'
 export SHELL='/bin/zsh'
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:$HOME/.bin"
+export PYTHONSTARTUP="$HOME/.pythonrc.py"
+export PATH="$HOME/.bin:/usr/lib/colorgcc/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
  # }}}
 
 
 # {{{ Program aliases
 # zsh aliases
+alias ze="$EDITOR $HOME/.zshrc"
 alias zr="source $HOME/.zshrc"
 
 # things to ignore
@@ -66,14 +68,27 @@ alias lla='ls -lhA'
 
 # cd aliases
 function cdl(){
-	if [ -n "$1" ]
-	then
+	if [ -n "$1" ]; then
 		cd "$1"
 	else
 		cd
 	fi
 	ls
 }
+
+function cdr(){
+	TMP=$(mktemp)
+
+	START="$PWD"
+	if [ -n "$1" ]; then
+		START="$1"
+	fi
+
+	ranger --choosedir="$TMP" "$START"
+	cd "$(cat $TMP)"
+	rm -f "$TMP"
+}
+
 alias cdd='cdl ~/Desktop/'
 
 #screen aliases
@@ -117,44 +132,30 @@ alias port-scan='nmap -p'
 # }}}
 
 
-# {{{ Filetype aliases
-alias -s pdf=zathura
-alias -s tex=vim
-alias -s torrent=transmission
-
-alias -s c=vim
-alias -s h=vim
-alias -s cc=vim
-alias -s hh=vim
-alias -s cpp=vim
-alias -s hpp=vim
-
-alias -s png=feh
-alias -s gif=feh
-alias -s jpg=feh
-alias -s jpeg=feh
-alias -s bmp=feh
-alias -s svg=feh
+# {{{ Autolaunch
+# (( $+commands[TODO] )) && TODO
 # }}}
 
 
-# {{{ Misc functions
-# Custom manpage colors
-function man() {
-	env \
-		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-		LESS_TERMCAP_md=$(printf "\e[1;31m") \
-		LESS_TERMCAP_me=$(printf "\e[0m") \
-		LESS_TERMCAP_se=$(printf "\e[0m") \
-		LESS_TERMCAP_so=$(printf "\e[47;30m") \
-		LESS_TERMCAP_ue=$(printf "\e[0m") \
-		LESS_TERMCAP_us=$(printf "\e[1;32m") \
-	man "$@"
-}
+# {{{ Configure prompt
+# {{{ Custom symbols
+POWERLINE="1"
+
+if [ "$POWERLINE" = "1" ]; then
+	LSEP1='\xE2\xAE\x80\x00' # left thick seperator
+	LSEP2='\xE2\xAE\x81\x00' # left thin seperator
+	RSEP1='\xE2\xAE\x82\x00' # right thick seperator
+	RSEP2='\xE2\xAE\x83\x00' # right thin seperator
+else
+	LSEP1=''
+	LSEP2=''
+	RSEP1=''
+	RSEP2=''
+fi
 # }}}
 
 
-# {{{ Build git prompt status
+# {{{ Git info
 function info-git(){
 	branch=$(git symbolic-ref HEAD 2>/dev/null | sed "s/refs\/heads\///g")
 	if [[ -n "$branch" ]]; then
@@ -172,22 +173,48 @@ function info-git(){
 			symbol+="."
 		fi
 		if [[ -n "$symbol" ]]; then
-			echo -n "(%F{green}git%f:%F{green}$branch $symbol%f)"
+			if [ ! "$symbol" = ".." ]; then
+				echo -ne "%F{red}$RSEP1%K{red}%f $symbol %K{red}%F{green}$RSEP1%K{green}%F{black} $branch %k%f"
+			else
+				echo -ne "%F{green}$RSEP1%K{green}%F{black} $branch %k%f"
+			fi
 		fi
 	fi
 }
 # }}}
 
 
-# {{{ Configure prompt
+# {{{ Status info
+function info-status(){
+	STATUS="$?"
+	if [ "$STATUS" = "0" ]; then
+		echo -ne "%K{green}%F{black} + %K{black}%F{green}$LSEP1"
+	else
+		echo -ne "%K{red}%f $STATUS %K{black}%F{red}$LSEP1"
+	fi
+}
+# }}}
+
+
+# {{{ User info
+function info-user(){
+	UID="$(id -u)"
+	if [[ "$UID" -eq 0 ]]; then
+		echo -ne "%K{black}%B%F{red} %n%b%B%K{black}%F{black}@%b%B%K{black}%F{red}%M%b%K{black} %K{blue}%F{black}$LSEP1 %f%. %k%F{blue}$LSEP1"
+	else
+		echo -ne "%K{black}%B%F{blue} %n%b%B%K{black}%F{black}@%b%B%K{black}%F{blue}%M%b%K{black} %K{blue}%F{black}$LSEP1 %f%. %k%F{blue}$LSEP1"
+	fi
+}
+# }}}
+
+
+# {{{ Assemble prompt
 if [[ "$(id -u)" -eq 0 ]]; then
-	PROMPT=$(echo -ne "\n[%F{red}%n%f@%F{red}%M%f]-(%F{blue}%.%f) # ")
+	PROMPT=$(echo -ne '\n$(info-status)$(info-user)%f %B%F{black}#%b%f ')
 else
-	PROMPT=$(echo -ne "\n(%F{blue}%n%f@%F{blue}%M%f)-(%F{blue}%.%f) $ ")
+	PROMPT=$(echo -ne '\n$(info-status)$(info-user)%f %B%F{black}$%b%f ')
 fi
 
 RPROMPT='$(info-git)%f'
 # }}}
-
-
-TODO
+# }}}
