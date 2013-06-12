@@ -1,0 +1,58 @@
+! ~/.Xdefaults
+!
+! Main config file for various Xorg programs (xterm, urxvt, etc)
+
+
+
+
+!{{{ Behavior settings
+*scrollBar:       false
+*saveLines:       1024
+!}}}
+
+
+!{{{ Font settings
+*font:     -*-terminus-medium-*-*-*-12-*-*-*-*-*-iso10646-*,\
+           -*-terminusmodx-medium-*-*-*-12-*-*-*-*-*-iso10646-*
+*boldFont: -*-terminus-bold-*-*-*-12-*-*-*-*-*-iso10646-*,\
+           -*-terminusmodx-bold-*-*-*-12-*-*-*-*-*-iso10646-*
+!}}}
+
+
+!{{{ Color settings
+*background:      #121212
+*foreground:      #FFFAFA
+*cursorColor:     #FFFAFA
+
+! black & dark grey
+*color0:  #212121
+*color8:  #485356
+
+! red & light red
+*color1:  #C72341
+*color9:  #FF5D4A
+
+! green & light green
+*color2:  #85C600
+*color10: #C2F456
+
+! yellow & light yellow
+*color3:  #FF9100
+*color11: #F69D3C
+
+! blue & light blue
+*color4:  #3371BB
+*color12: #689AD6
+
+! purple & light purple
+*color5:  #9B2A65
+*color13: #9A4E76
+
+! cyan & light cyan
+*color6:  #446A6B
+*color14: #76B2B3
+
+! light grey & white
+*color7:  #B0B0B0
+*color15: #E2E2E2
+!}}}

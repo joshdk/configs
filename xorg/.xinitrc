@@ -40,6 +40,16 @@ amixer set Master 20%
 
 
 #{{{ Start window manager
-# Awesome WM
-exec awesome &> ~/.config/awesome/awesome.log
+SESSION="$1"
+
+case "$SESSION" in
+	awesome)
+		# Awesome WM
+		exec awesome &> ~/.config/awesome/awesome.log
+		;;
+	*)
+		# Awesome WM
+		exec awesome &> ~/.config/awesome/awesome.log
+		;;
+esac
 #}}}
